@@ -1,0 +1,231 @@
+<!-- mixing_parameters.html -->
+{% extends "base.html" %}  <!-- Наследуемся от шаблона base.html -->
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <!-- Параметры EC -->
+        <div class="row-container">  <!-- Контейнер для содержимого -->
+            <div class="parameter-container">
+                <span class="parameter-name">Параметры EC</span>
+                <table>
+                    <tr>
+                        <th>Целевое значение EC (mS/cm)</th>
+                        <td id="target_ec">{{ mixing_params.target_ec }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('target_ec')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Допустимое отклонение EC (mS/cm)</th>
+                        <td id="ec_deviation">{{ mixing_params.ec_deviation }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('ec_deviation')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Плотность компонента A (г/л)</th>
+                        <td id="density_a">{{ mixing_params.density_a }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('density_a')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Плотность компонента B (г/л)</th>
+                        <td id="density_b">{{ mixing_params.density_b }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('density_b')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Параметры pH -->
+            <div class="parameter-container">
+                <span class="parameter-name">Параметры pH</span>
+                <table>
+                    <tr>
+                        <th>Целевое значение pH</th>
+                        <td id="target_ph">{{ mixing_params.target_ph }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('target_ph')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Допустимое отклонение pH</th>
+                        <td id="ph_deviation">{{ mixing_params.ph_deviation }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('ph_deviation')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Концентрация кислоты (%)</th>
+                        <td id="density_acid">{{ mixing_params.density_acid }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('density_acid')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Буферность раствора (%)</th>
+                        <td id="bf">{{ mixing_params.bf }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('bf')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Общие параметры -->
+            <div class="parameter-container">
+                <span class="parameter-name">Общие параметры</span>
+                <table>
+                    <tr>
+                        <th>Объём бака (л)</th>
+                        <td id="tank_volume">{{ mixing_params.tank_volume }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('tank_volume')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Скорость перемешивания (%)</th>
+                        <td id="mixing_speed">{{ mixing_params.mixing_speed }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('mixing_speed')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Время стабилизации (сек)</th>
+                        <td id="stabilization_time">{{ mixing_params.stabilization_time }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('stabilization_time')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Производительность насоса (мл/мин)</th>
+                        <td id="pump_flow_rate">{{ mixing_params.pump_flow_rate }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('pump_flow_rate')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>Максимальное время подачи (сек)</th>
+                        <td id="maxtime">{{ mixing_params.maxtime }}</td>
+                        <td>
+                            <button class="btn btn-primary"
+                                    onclick="openModal('maxtime')"
+                                    {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                Изменить</button>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
+            <!-- Модальное окно -->
+            <div id="valueModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeModal()">&times;</span>
+                    <h2>Изменение параметра</h2>
+                    <form onsubmit="setValue(event);">
+                        <input type="hidden" id="parameter-name">
+                        <div class="form-group">
+                            <label for="parameter-value">Введите новое значение</label>
+                            <input type="number" id="parameter-value" class="form-control" placeholder="Введите значение" step="any">
+                        </div>
+                        <button type="submit" class="btn btn-primary" onclick="setValue()">Записать</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Подключение скриптов -->
+<script>
+    function openModal(parameterName) {
+        document.getElementById('parameter-name').value = parameterName;
+        document.getElementById('parameter-value').value = '';
+        document.getElementById('valueModal').style.display = 'block';
+    }
+
+    function closeModal() {
+        document.getElementById('valueModal').style.display = 'none';
+    }
+
+    function setValue(event) {
+        event.preventDefault(); // Предотвращаем перезагрузку страницы
+
+        var parameterName = document.getElementById('parameter-name').value;
+        var parameterValue = document.getElementById('parameter-value').value;
+
+        // Проверка, что значение введено
+        if (parameterValue === '') {
+            alert('Пожалуйста, введите значение.');
+            return;
+        }
+
+        // Отправка AJAX-запроса на сервер для обновления значения
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/update_mixing_parameter', true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        xhr.onload = function () {
+            if (xhr.status === 200) {
+                // Обновляем отображаемое значение на странице
+                document.getElementById(parameterName).innerText = parameterValue;
+                closeModal();
+            } else {
+                alert('Ошибка при обновлении параметра.');
+            }
+        };
+
+        xhr.send(JSON.stringify({
+            'parameter_name': parameterName,
+            'parameter_value': parameterValue
+        }));
+    }
+
+
+    // Закрытие модального окна при клике вне его
+    window.onclick = function(event) {
+        var modal = document.getElementById('valueModal');
+        if (event.target == modal) {
+            closeModal();
+        }
+    }
+</script>
+{% endblock %}

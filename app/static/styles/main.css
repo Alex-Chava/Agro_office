@@ -1,0 +1,301 @@
+/* Основные стили для всего тела страницы */
+body {
+    font-family: Arial, sans-serif; /* Шрифт для всего текста на странице */
+    background-image: linear-gradient(to bottom, #458fd3, #275e8b); /* Градиентный фон */
+    color: #333; /* Основной цвет текста */
+    margin: 0; /* Убираем отступы по краям страницы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+.main-wrapper {
+    display: flex;
+    justify-content: center; /* Центрирует по горизонтали */
+    padding-top: 20px; /* Отступ сверху, чтобы контейнер не прилипал к меню */
+}
+/* Контейнер для основного содержимого */
+.container {
+    max-width: 1200px; /* Максимальная ширина контейнера */
+    margin: 20px auto; /* Центрируем контейнер по горизонтали и добавляем отступы сверху и снизу */
+    padding: 20px; /* Внутренние отступы контейнера */
+    background-color: #fff; /* Цвет фона контейнера */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Тень вокруг контейнера */
+    border-radius: 18px; /* Скругленные углы контейнера */
+    display: inline-flex; /* Используем Flexbox для выравнивания элементов */
+    flex-direction: column; /* Размещаем элементы друг над другом */
+    align-items: center; /* Выравнивание по вертикали */
+}
+
+.row-container {
+    display: flex;
+    flex-direction: row; /* Выстраивает лотки горизонтально */
+    gap: 5px; /* Расстояние между лотками */
+}
+
+/* Стили для заголовков */
+h1 {
+    font-size: 24px; /* Размер шрифта заголовка первого уровня */
+    margin-bottom: 20px; /* Отступ снизу заголовка */
+}
+
+h2 {
+    font-size: 20px; /* Размер шрифта заголовка второго уровня */
+    margin-top: 20px; /* Отступ сверху заголовка */
+    margin-bottom: 10px; /* Отступ снизу заголовка */
+    text-align: center;
+}
+
+/* Стили для контейнера параметра */
+.parameter-container {
+    border: 5px double #000; /* Двойная тонкая линия */
+    padding: 10px; /* Внутренние отступы */
+    margin-bottom: 10px; /* Отступ снизу */
+    display: inline-flex; /* Используем Flexbox для выравнивания элементов */
+    flex-direction: column; /* Размещаем элементы друг над другом */
+    align-items: center; /* Выравнивание по вертикали */
+}
+
+/* Стили для имени параметра */
+.parameter-name {
+    font-size: 26px; /* Размер шрифта */
+    color: #333; /* Цвет текста */
+    margin-right: 0px; /* Отступ справа */
+}
+
+/* Стили для строки */
+.row {
+    display: flex;
+    justify-content: space-between; /* Распределение по ширине блока */
+    flex-wrap: wrap; /* Перенос элементов при переполнении */
+}
+
+/* Стили для колонки */
+.col {
+    flex: 0 0 auto; /* Ширина элементов по содержимому */
+    flex-direction: column;  /* Расположение элементов по вертикали */
+    display: flex;           /* Использование flexbox для центрирования */
+    justify-content: center; /* Центрирование по горизонтали */
+    align-items: center;     /* Центрирование по вертикали */
+}
+
+/* Стили для таблиц */
+table {
+    width: 30%; /* Ширина таблицы */
+    border-collapse: collapse; /* Убираем промежутки между ячейками */
+    margin-bottom: 20px; /* Отступ снизу таблицы */
+}
+
+/* Стили для ячеек заголовков таблиц */
+th {
+    background-image: linear-gradient(to bottom, #458fd3, #275e8b); /* Градиентный фон */
+    color: white; /* Цвет текста заголовков */
+    border: 1px solid #ddd; /* Граница ячеек заголовков */
+    padding: 8px; /* Внутренние отступы ячеек заголовков */
+    text-align: left; /* Выравнивание текста в ячейках заголовков */
+    white-space: nowrap;     /* Запрет переноса текста */
+}
+
+
+
+/* Стили для ячеек таблиц */
+td {
+    background-color: #f9f9f9; /* Цвет фона ячеек */
+    border: 1px solid #ddd; /* Граница ячеек */
+    padding: 8px; /* Внутренние отступы ячеек */
+    text-align: left; /* Выравнивание текста в ячейках */
+}
+
+/* Стили для четных строк таблиц */
+tr:nth-child(even) {
+    background-color: #f2f2f2; /* Цвет фона для четных строк */
+}
+
+/* Стили для строки при наведении мыши */
+tr:hover {
+    background-color: #ddd; /* Цвет фона для строки при наведении */
+}
+
+/* Стили для кнопок в ячейках таблицы */
+.status-button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Стили для кнопок в зависимости от состояния */
+.status-button.on {
+    background-color: green;
+}
+
+.status-button.on:hover {
+    background-color: #4CAF50;
+    /* color: black;*/
+}
+
+.status-button.off {
+    background-color: grey;
+}
+
+/* Стили для кнопок при наведении */
+.status-button.off:hover {
+    background-color: darkgray;
+    /* color: black;*/
+}
+
+/* Стили для кнопок света */
+.status-button.light.on {
+    background-color: yellow;
+    color: black;
+}
+
+.status-button.light.off {
+    background-color: darkgray;
+}
+
+.status-button.light.on:hover {
+    background-color: lightyellow;
+    color: black;
+}
+
+.status-button.light.off:hover {
+    background-color: gray;
+}
+
+/* Стили для кнопок полива #458fd3, #275e8b*/
+.status-button.water.on {
+    background-color: #458fd3;
+}
+
+.status-button.water.off {
+    background-color: darkgray;
+}
+
+.status-button.water.on:hover {
+    background-color: lightblue;
+}
+
+.status-button.water.off:hover {
+    background-color: gray;
+}
+
+/* Стили для навигационного меню */
+nav {
+    background-color: #333; /* Цвет фона навигационного меню */
+    color: white; /* Цвет текста навигационного меню */
+    padding: 5px; /* Внутренние отступы навигационного меню */
+    font-size: 20px; /* Размер шрифта кнопки */
+}
+
+nav ul li a:hover {
+    color: #cccccc; /* Замените #ff0000 на нужный вам цвет */
+}
+
+/* Стили для списка навигационного меню */
+nav ul {
+    list-style-type: none; /* Убираем маркеры списка */
+    padding: 5; /* Убираем внутренние отступы списка */
+    display: flex;
+    justify-content: space-between;
+}
+
+
+nav ul li:last-child {
+    margin-left: auto;
+}
+
+/* Стили для элементов списка навигационного меню */
+nav ul li {
+    display: inline; /* Выравниваем элементы списка в одну строку */
+    margin-right: 20px; /* Отступ справа от каждого элемента списка */
+}
+
+/* Стили для ссылок навигационного меню */
+nav ul li a {
+    color: white; /* Цвет текста ссылок */
+    text-decoration: none; /* Убираем подчеркивание у ссылок */
+}
+
+/* Стили для кнопки задать значение */
+.set-value-button {
+    width: 24px; /* Ширина кнопки */
+    height: 24px; /* Высота кнопки */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background: url('/static/images/set.jpg') no-repeat center center; /* Фон кнопки */
+    background-size: contain; /* Размер изображения */
+    transition: background-color 0.3s;
+}
+
+.set-value-button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Стили для модального окна */
+.modal {
+    display: none; /* Скрываем модальное окно по умолчанию */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgb(0,0,0); /* Цвет фона */
+    background-color: rgba(0,0,0,0.4); /* Прозрачный фон */
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* Центрирование модального окна */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+    max-width: 500px;
+    border-radius: 10px; /* Закругленные углы */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Тень */
+}
+
+/* Стили для закрывающей кнопки */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Стили для формы внутри модального окна */
+.modal-content .form-group {
+    margin-bottom: 15px;
+}
+
+.modal-content .form-control {
+    width: 100%;
+    padding: 10px;
+    margin: 5px 0 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+.modal-content .btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.modal-content .btn:hover {
+    background-color: #0056b3;
+}

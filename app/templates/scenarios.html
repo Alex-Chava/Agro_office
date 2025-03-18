@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <div class="row">
+            <!-- Сценарии полива -->
+            <div class="col">
+                <h1>Сценарии полива</h1>
+                {% if current_user.username == 'admin' %}
+                    <button class="btn btn-primary" onclick="openAddScenarioModal('Полив')">Добавить сценарий</button>
+                {% endif %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Параметр</th>
+                            <th>Значение</th>
+                            <th>Результат</th>
+                            <th>Дата, время крайнего срабатывания</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="irrigation-scenarios">
+                        {% for scenario in irrigation_scenarios %}
+                        <tr>
+                            <td>{{ scenario.time }}</td>
+                            <td>{{ scenario.parameter }}</td>
+                            <td>{{ scenario.value }}</td>
+                            <td>{{ scenario.result }}</td>
+                            <td>{{ scenario.last_execution }}</td>
+                            <td>{% if current_user.username == 'admin' %}
+                                <button class="btn btn-danger" onclick="deleteScenario({{ scenario.id }}, 'Полив')">Удалить</button>
+                            {% endif %}</td>
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Сценарии света -->
+            <div class="col">
+                <h1>Сценарии света</h1>
+                {% if current_user.username == 'admin' %}
+                    <button class="btn btn-primary" onclick="openAddScenarioModal('Свет')">Добавить сценарий</button>
+                {% endif %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Время</th>
+                            <th>Параметр</th>
+                            <th>Значение</th>
+                            <th>Результат</th>
+                            <th>Дата, время крайнего срабатывания</th>
+                            <th>Действия</th>
+                        </tr>
+                    </thead>
+                    <tbody id="light-scenarios">
+                        {% for scenario in light_scenarios %}
+                        <tr>
+                            <td>{{ scenario.time }}</td>
+                            <td>{{ scenario.parameter }}</td>
+                            <td>{{ scenario.value }}</td>
+                            <td>{{ scenario.result }}</td>
+                            <td>{{ scenario.last_execution }}</td>
+                            <td>{% if current_user.username == 'admin' %}
+                                <button class="btn btn-danger" onclick="deleteScenario({{ scenario.id }}, 'Свет')">Удалить</button>
+                            {% endif %}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Модальное окно для добавления сценария -->
+<div id="addScenarioModal" class="modal">
+    <div class="modal-content">
+        <span class="close" onclick="closeModal()">&times;</span>
+        <h1>Добавить сценарий</h1>
+        <form id="addScenarioForm">
+            <input type="hidden" id="scenario-type" name="type">
+            <div class="form-group">
+                <label for="scenario-time">Время</label>
+                <input type="time" id="scenario-time" name="time" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="scenario-parameter">Параметр</label>
+                <select id="scenario-parameter" name="parameter" class="form-control" required></select>
+            </div>
+            <div class="form-group">
+                <label for="scenario-value">Значение</label>
+                <select id="scenario-value" name="value" class="form-control" required>
+                    <option value="1">включить</option>
+                    <option value="0">отключить</option>
+                </select>
+                <input type="number" id="scenario-value-number" name="value_number" class="form-control" min="1" max="100" style="display:none;">
+            </div>
+            <button type="button" class="btn btn-primary" onclick="addScenario()">Добавить</button>
+        </form>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/scenarios.js') }}"></script>
+{% endblock %}

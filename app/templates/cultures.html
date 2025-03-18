@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+        <h1>Справочник культур</h1>
+
+        <!-- Кнопка для добавления новой записи -->
+        {% if current_user.username == 'admin' %}
+            <button class="btn btn-primary" onclick="openCultureModal()">Добавить культуру</button>
+        {% endif %}
+
+        <!-- Таблица справочника -->
+        <table id="culturesTable">
+            <thead>
+                <tr>
+                    <th class="th_culture">Название</th>
+                    <!-- Сроки пребывания в предварительных зонах -->
+                    <th class="th_culture">Проращивание в камере (дней)</th>
+                    <th class="th_culture">Проращивание на полке (дней)</th>
+                    <th class="th_culture">Рассада (дней)</th>
+                    <!-- Вместимость на полке -->
+                    <th class="th_culture">Горшков в проращивании</th>
+                    <th class="th_culture">Горшков в рассаде</th>
+                    <th class="th_culture">Горшков на основном этапе</th>
+                    <!-- Первичное созревание от посадки зерна -->
+                    <th class="th_culture">Мин. дней созревания (от посадки)</th>
+                    <th class="th_culture">Мин. вес (г) (от посадки)</th>
+                    <th class="th_culture">Макс. дней созревания (от посадки)</th>
+                    <th class="th_culture">Макс. вес (г) (от посадки)</th>
+                    <!-- Повторное созревание после срезки -->
+                    <th class="th_culture">Мин. дней созревания (после срезки)</th>
+                    <th class="th_culture">Мин. вес (г) (после срезки)</th>
+                    <th class="th_culture">Макс. дней созревания (после срезки)</th>
+                    <th class="th_culture">Макс. вес (г) (после срезки)</th>
+                    <th class="th_culture">Действия</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for culture in cultures %}
+                <tr>
+                    <td>{{ culture.name }}</td>
+                    <!-- Сроки пребывания в предварительных зонах -->
+                    <td>{{ culture.sprouting_in_chamber_days }}</td>
+                    <td>{{ culture.sprouting_on_shelf_days }}</td>
+                    <td>{{ culture.seedling_days }}</td>
+                    <!-- Вместимость на полке -->
+                    <td>{{ culture.pots_at_sprouting }}</td>
+                    <td>{{ culture.pots_at_seedling }}</td>
+                    <td>{{ culture.pots_at_main_stage }}</td>
+                    <!-- Первичное созревание от посадки зерна -->
+                    <td>{{ culture.min_days_from_planting }}</td>
+                    <td>{{ culture.min_weight_from_planting }}</td>
+                    <td>{{ culture.max_days_from_planting }}</td>
+                    <td>{{ culture.max_weight_from_planting }}</td>
+                    <!-- Повторное созревание после срезки -->
+                    <td>{{ culture.min_days_from_cutting }}</td>
+                    <td>{{ culture.min_weight_from_cutting }}</td>
+                    <td>{{ culture.max_days_from_cutting }}</td>
+                    <td>{{ culture.max_weight_from_cutting }}</td>
+                    <td>
+                        {% if current_user.username == 'admin' %}
+                            <button class="btn btn-secondary" onclick="openCultureModal({{ culture.culture_id }})">Обновить</button><!--
+                         --><button class="btn btn-danger" onclick="deleteCulture({{ culture.culture_id }})">Удалить</button>
+                        {% endif %}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Модальное окно для добавления/обновления культуры -->
+        <div id="culture-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal('culture-modal')">&times;</span>
+                <h2 id="culture-modal-title">Добавить культуру</h2>
+
+                <form id="cultureForm" method="POST" action="{{ url_for('save_culture', culture_id=culture.culture_id if culture else None) }}">
+                    {{ form.hidden_tag() }}
+                    <input type="hidden" name="culture_id" id="culture_id">
+                    <div class="form-group">
+                        <label for="name">Название культуры</label>
+                        {{ form.name(class="form-control") }}
+                    </div>
+
+                    <!-- Сроки пребывания в предварительных зонах -->
+                    <div class="form-group">
+                        <label for="sprouting_in_chamber_days">Проращивание в камере (дней)</label>
+                        {{ form.sprouting_in_chamber_days(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="sprouting_on_shelf_days">Проращивание на полке (дней)</label>
+                        {{ form.sprouting_on_shelf_days(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="seedling_days">Рассада (дней)</label>
+                        {{ form.seedling_days(class="form-control") }}
+                    </div>
+
+                    <!-- Вместимость на полке -->
+                    <div class="form-group">
+                        <label for="pots_at_sprouting">Горшков в проращивании</label>
+                        {{ form.pots_at_sprouting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="pots_at_seedling">Горшков в рассаде</label>
+                        {{ form.pots_at_seedling(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="pots_at_main_stage">Горшков на основном этапе</label>
+                        {{ form.pots_at_main_stage(class="form-control") }}
+                    </div>
+
+                    <!-- Первичное созревание от посадки зерна -->
+                    <div class="form-group">
+                        <label for="min_days_from_planting">Мин. дней созревания (от посадки)</label>
+                        {{ form.min_days_from_planting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="min_weight_from_planting">Мин. вес (г) (от посадки)</label>
+                        {{ form.min_weight_from_planting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="max_days_from_planting">Макс. дней созревания (от посадки)</label>
+                        {{ form.max_days_from_planting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="max_weight_from_planting">Макс. вес (г) (от посадки)</label>
+                        {{ form.max_weight_from_planting(class="form-control") }}
+                    </div>
+
+                    <!-- Повторное созревание после срезки -->
+                    <div class="form-group">
+                        <label for="min_days_from_cutting">Мин. дней созревания (после срезки)</label>
+                        {{ form.min_days_from_cutting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="min_weight_from_cutting">Мин. вес (г) (после срезки)</label>
+                        {{ form.min_weight_from_cutting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="max_days_from_cutting">Макс. дней созревания (после срезки)</label>
+                        {{ form.max_days_from_cutting(class="form-control") }}
+                    </div>
+                    <div class="form-group">
+                        <label for="max_weight_from_cutting">Макс. вес (г) (после срезки)</label>
+                        {{ form.max_weight_from_cutting(class="form-control") }}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Сохранить культуру</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='scripts/cultures.js') }}"></script>
+{% endblock %}

@@ -1,0 +1,163 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="main-wrapper">
+    <div class="container">
+
+        <h1>Контроль посадки</h1>
+        <!-- Блок анализа -->
+        <div class="analysis">
+            <h3>Анализ:</h3>
+            <p>Свободных лотков: -</p>
+            <p>Процент заполнения фермы: -%</p>
+            <h3>Объём готовых культур:</h3>
+            <p>Загрузка данных...</p>
+        </div>
+        <div class="controls">
+            <label for="control-date">Выберите дату:</label>
+            <input class="control-date" type="date" id="control-date" value="{{ default_date }}">
+            {% if current_user.username == 'admin' %}
+                <button id="open-collect-modal" class="btn btn-primary">Сбор</button>
+                <button id="open-planting-modal" class="btn btn-primary">Посадка</button>
+                <button id="open-harvest-modal" class="btn btn-primary">Срезка</button>
+                <button id="open-update-modal" class="btn btn-primary">Обновить</button>
+            {% endif %}
+            <button id="reset-selection" class="btn btn-secondary">Сбросить выбор</button> <!-- Новая кнопка -->
+        </div>
+        <div id="trays-container">
+            {% for line in lines %}
+            <div class="line">
+                <h2>Лоток {{ line.number }}</h2>
+                {% for zone in line.zones %}
+                <div class="zone">
+                    {% for shelf in zone.shelves %}
+                    <div class="shelf">
+                        <div class="tray-row">
+                            {% for tray in shelf.trays %}
+                            <label class="tray" id="tray-{{ tray.id }}" style="background-image: url({{ tray.backgroundImage }});">
+                                <input type="checkbox" name="trays" value="{{ tray.id }}">
+                                <span class="tray-status">{{ tray.status }}</span>
+                            </label>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+
+
+    </div>
+
+    <!-- Модальное окно для сбора -->
+    <div id="collect-modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('collect-modal')">&times;</span>
+            <h2>Выберите лотки для сбора</h2>
+            <ul id="selected-trays-collect"></ul>
+            <input type="hidden" id="selected-trays-input-collect">
+            <button type="button" class="btn btn-success" onclick="submitCollect()">Собрать</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно для посадки -->
+    <div id="plantingModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('plantingModal')">&times;</span>
+            <h2>Подтвердите посадку для следующих лотков:</h2>
+            <ul id="selected-trays-planting"></ul>
+            <form id="plantingForm">
+                <input type="hidden" name="selected_trays" id="selected-trays-input-planting">
+                <div class="form-group">
+                    <label for="culture_id">Вид культуры:</label>
+                    <select id="culture_id" class="form-control" required>
+                        {% for culture in cultures %}
+                        <option value="{{ culture.culture_id }}">{{ culture.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="growth_stage">Стадия роста:</label>
+                    <select id="growth_stage" class="form-control" required>
+                        <option value="Проращивание">Проращивание</option>
+                        <option value="Рассада">Рассада</option>
+                        <option value="Основная">Основная</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sprouting_date">Дата посадки:</label>
+                    <input type="date" id="sprouting_date" class="form-control" required value="{{ default_date }}">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="submitPlanting()">Посадить</button>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- Модальное окно для срезки -->
+    <div id="harvestModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('harvestModal')">&times;</span>
+            <h2>Подтвердите срезку для следующих лотков:</h2>
+            <ul id="selected-trays-harvest"></ul>
+            <form id="harvestForm">
+                <input type="hidden" name="selected_trays" id="selected-trays-input-harvest">
+                <div class="form-group">
+                    <label for="harvest_date">Дата срезки:</label>
+                    <input type="date" id="harvest_date" class="form-control" required value="{{ default_date }}">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="submitHarvest()">Срезать</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Модальное окно для обновления -->
+    <div id="updateModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('updateModal')">&times;</span>
+            <h2>Обновить данные лотка</h2>
+            <form id="updateForm">
+                <input type="hidden" name="tray_id" id="update-tray-id">
+
+                <!-- Поле "Вид культуры" с выпадающим списком -->
+                <div class="form-group">
+                    <label for="update-culture_id">Вид культуры:</label>
+                    <select id="update-culture_id" class="form-control" required>
+                        {% for culture in cultures %}
+                        <option value="{{ culture.culture_id }}">{{ culture.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- Поле "Стадия роста" с выпадающим списком -->
+                <div class="form-group">
+                    <label for="update-growth_stage">Стадия роста:</label>
+                    <select id="update-growth_stage" class="form-control" required>
+                        <option value="Проращивание">Проращивание</option>
+                        <option value="Рассада">Рассада</option>
+                        <option value="Основная">Основная</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="update-sprouting_date">Дата посадки:</label>
+                    <input type="date" id="update-sprouting_date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="update-harvest_date">Дата срезки:</label>
+                    <input type="date" id="update-harvest_date" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="update-pots_planted">Количество посаженных горшков:</label>
+                    <input type="number" id="update-pots_planted" class="form-control">
+                </div>
+                <button type="button" class="btn btn-primary" onclick="submitUpdate()">Сохранить</button>
+                <button type="button" class="btn btn-secondary" onclick="closeModal('updateModal')">Отменить</button>
+            </form>
+        </div>
+    </div>
+</div>
+<script src="{{ url_for('static', filename='scripts/plantings.js') }}"></script>
+
+{% endblock %}

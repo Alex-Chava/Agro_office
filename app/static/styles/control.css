@@ -1,0 +1,169 @@
+/* styles/control.css */
+.container {
+    padding: 20px;
+}
+
+.controls {
+    margin-bottom: 20px;
+}
+
+.line {
+    display: flex;
+    flex-wrap: wrap; /* Это позволит разместить лотки в один ряд */
+    gap: 10px; /* Расстояние между лотками */
+    margin-bottom: 20px;
+}
+
+.tray-row {
+    display: flex;
+    flex-direction: row; /* Выстраивает лотки горизонтально */
+    gap: 5px; /* Расстояние между лотками */
+}
+
+
+.tray {
+    display: inline-block;
+    width: 100px;
+    height: 60px;
+    margin: 2px;
+    background-size: cover;
+    position: relative;
+    font-weight: bold;
+    color: black; /* Цвет текста */
+    text-align: center;
+    justify-content: center; /* Центрирует текст по горизонтали */
+    align-items: flex-start; /* Выравнивает текст по верху контейнера */
+    cursor: pointer;
+    border: 1px solid #ccc;
+    display: flex;
+}
+
+.tray.selected {
+    border: 3px solid #007bff; /* Синяя рамка для выбранных лотков */
+    background-color: rgba(0, 123, 255, 0.1); /* Легкое затемнение для выбранных лотков */
+}
+
+/* Модальное окно */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0,0,0,0.4);
+}
+
+.modal-content {
+    background-color: #fefefe;
+    margin: 5% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 90%;
+    max-width: 1200px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Контейнер для линий */
+.lines-container {
+    display: flex;
+    justify-content: space-around;
+}
+
+/* Блок для линии */
+.line-block {
+    width: 30%;
+}
+
+/* Матрица чекбоксов */
+.tray-matrix {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 20px;
+}
+
+.tray input[type="checkbox"] {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    cursor: pointer;
+    z-index: 3;  /* Чтобы кнопка оставалась сверху */
+}
+
+.tray-label {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    width: 100%;
+    height: 100%;
+    font-weight: bold;
+    font-size: 16px;
+    color: black;
+    background-size: cover;
+    text-shadow: 1px 1px 2px black;
+    z-index: 2; /* Обеспечивает, что текст будет над изображением */
+}
+
+.btn {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.btn:hover {
+    background-color: #0056b3;
+}
+
+/* Стили для ввода даты */
+.control-date {
+    display: inline-block;
+    padding: 0.375rem 0.75rem; /* Пространство внутри поля */
+    font-size: 1rem; /* Размер шрифта */
+    line-height: 1.5;
+    color: #495057; /* Цвет текста */
+    background-color: #fff; /* Цвет фона */
+    background-clip: padding-box;
+    border: 1px solid #ced4da; /* Цвет и толщина границы */
+    border-radius: 0.25rem; /* Закругление углов */
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out; /* Анимация при фокусе */
+}
+
+/* Стили при фокусе */
+.control-date:focus {
+    border-color: #80bdff; /* Цвет границы при фокусе */
+    outline: 0;
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25); /* Тень при фокусе */
+}
+
+/* Дополнительные стили для совместимости */
+.control-date::placeholder {
+    color: #6c757d; /* Цвет плейсхолдера */
+    opacity: 1; /* Прозрачность плейсхолдера */
+}
+
+.control-date:-ms-input-placeholder {
+    color: #6c757d;
+}
+
+.control-date::-ms-input-placeholder {
+    color: #6c757d;
+}

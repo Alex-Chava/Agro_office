@@ -1,0 +1,245 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="main-wrapper">
+    <div class="container_log">
+        <!-- Информация -->
+        <div class="parameter-container">
+            <h2>Информация о событиях фермы</h2>
+            <div class="log-container2">
+                {% if logs_info %}
+                    <ul class="log-list">
+                        {% for log in logs_info %}
+                            <li>{{ (log.timestamp + timedelta).strftime('%d.%m.%Y %H:%M:%S') }} {{ log.message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Нет информационных сообщений.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="row-container">
+            <div class="parameter-container">
+                <span class="parameter-name">Полка 1</span>
+                <button id="shelf1" class="status-button {{ 'on' if parameters_dict.get('полка 1') == '1' else 'off' }}"
+                        onclick="toggleParameter('полка 1')"
+                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                    {{ 'Включен' if parameters_dict.get('полка 1') == '1' else 'Выключен' }}
+                </button>
+                <span class="parameter-name">Полка 2</span>
+                <button id="shelf2" class="status-button {{ 'on' if parameters_dict.get('полка 2') == '1' else 'off' }}"
+                        onclick="toggleParameter('полка 2')"
+                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                    {{ 'Включен' if parameters_dict.get('полка 2') == '1' else 'Выключен' }}
+                </button>
+                <span class="parameter-name">Полка 3</span>
+                <button id="shelf3" class="status-button {{ 'on' if parameters_dict.get('полка 3') == '1' else 'off' }}"
+                        onclick="toggleParameter('полка 3')"
+                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                    {{ 'Включен' if parameters_dict.get('полка 3') == '1' else 'Выключен' }}
+                </button>
+                <span class="parameter-name">Полка 4</span>
+                <button id="shelf4" class="status-button {{ 'on' if parameters_dict.get('полка 4') == '1' else 'off' }}"
+                        onclick="toggleParameter('полка 4')"
+                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                    {{ 'Включен' if parameters_dict.get('полка 4') == '1' else 'Выключен' }}
+                </button>
+            </div>
+
+            <div class="parameter-container">
+                <span class="parameter-name">Перемешивание</span>
+                <button id="stir" class="status-button {{ 'on' if parameters_dict.get('перемешивание') == '1' else 'off' }}"
+                        onclick="toggleParameter('перемешивание')"
+                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                     {{ 'Включен' if parameters_dict.get('перемешивание') == '1' else 'Выключен' }}
+                </button>
+                    <span class="parameter-name">Уровень БАКА</span>
+                    <table>
+                        <tr>
+                            <th>Верхний</th>
+                            <td id="level-1" class="indicator-wrapper">
+                                  <div id="indicator-level-1" class="status-indicator {{ 'filled' if parameters_dict['уровень БАК максимум'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Средний</th>
+                            <td id="level-2" class="indicator-wrapper">
+                                    <div id="indicator-level-2" class="status-indicator {{ 'filled' if parameters_dict['уровень БАК центр'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Нижний</th>
+                            <td id="level-3" class="indicator-wrapper">
+                                    <div id="indicator-level-3" class="status-indicator {{ 'filled' if parameters_dict['уровень БАК минимум'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                    </table>
+            </div>
+
+            <div class="container">
+                <div class="parameter-container">
+                    <span class="parameter-name">КРАСНЫЙ СВЕТ</span>
+                    <table>
+                        <tr>
+                            <th>% яркости</th>
+                            <td>
+                                <!-- Добавлен id="red-light" для обновления текста -->
+                                <button id="red-light" class="btn btn-primary"
+                                        onclick="openModal('Уровень красного света')"
+                                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                    {{ parameters_dict['Уровень красного света'] }}
+                                </button>
+                            </td>
+                            <!-- Модальное окно -->
+                            <div id="valueModal" class="modal">
+                                <div class="modal-content">
+                                    <span class="close" onclick="closeModal()">&times;</span>
+                                    <h2>Диммирование выбранным каналом</h2>
+                                    <form>
+                                        <input type="hidden" id="parameter-name">
+                                        <div class="form-group">
+                                            <label for="parameter-value">Введите значение яркости в %</label>
+                                            <input type="number" id="parameter-value" class="form-control" placeholder="Введите значение">
+                                        </div>
+                                        <button type="button" class="btn btn-primary" onclick="setValue()">Записать</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </tr>
+                    </table>
+                    <button id="red-light-btn" class="status-button {{ 'on' if parameters_dict.get('Канал красного света') == '1' else 'off' }}"
+                            onclick="toggleParameter('Канал красного света')"
+                            {% if current_user.username != 'admin' %} disabled {% endif %}>
+                        {{ 'Включен' if parameters_dict.get('Канал красного света') == '1' else 'Выключен' }}
+                    </button>
+                </div>
+                <div class="parameter-container">
+                    <span class="parameter-name">БЕЛЫЙ СВЕТ</span>
+                    <table>
+                        <tr>
+                            <th>% яркости</th>
+                            <td>
+                                <!-- Добавлен id="white-light" для обновления текста -->
+                                <button id="white-light" class="btn btn-primary"
+                                        onclick="openModal('Уровень белого света')"
+                                        {% if current_user.username != 'admin' %} disabled {% endif %}>
+                                    {{ parameters_dict['Уровень белого света'] }}
+                                </button>
+                            </td>
+                        </tr>
+                    </table>
+                    <button id="white-light-btn" class="status-button {{ 'on' if parameters_dict.get('Канал белого света') == '1' else 'off' }}"
+                            onclick="toggleParameter('Канал белого света')"
+                            {% if current_user.username != 'admin' %} disabled {% endif %}>
+                        {{ 'Включен' if parameters_dict.get('Канал белого света') == '1' else 'Выключен' }}
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row-container">
+                <div class="parameter-container">
+                    <span class="parameter-name">Показатели</span>
+                    <table>
+                        <tr>
+                            <th>Уровень PH</th>
+                            <td id="UNIT_ID_PH">{{ parameters_dict['Уровень PH'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Уровень EC</th>
+                            <td id="UNIT_ID_EC">{{ parameters_dict['Уровень EC'] }}</td>
+                        </tr>
+                    </table>
+                </div>
+                <!-- Баки компонентов -->
+                <div class="parameter-container">
+                    <span class="parameter-name">Баки компонентов</span>
+                    <table>
+                        <tr>
+                            <th>Уровень А</th>
+                            <td id="level-A" class="indicator-wrapper">
+                                <div id="indicator-level-A" class="status-indicator {{ 'filled' if parameters_dict['Уровень А мин'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Уровень В</th>
+                            <td id="level-B" class="indicator-wrapper">
+                                <div id="indicator-level-B" class="status-indicator {{ 'filled' if parameters_dict['Уровень В мин'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Уровень К</th>
+                            <td id="level-K" class="indicator-wrapper">
+                                <div id="indicator-level-K" class="status-indicator {{ 'filled' if parameters_dict['Уровень К мин'] == '1' else 'empty' }}"></div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="parameter-container">
+                    <span class="parameter-name">Подача компонентов</span>
+                    <table>
+                        <tr>
+                            <th>А для EC</th>
+                            <td id="statusA">откл</td>
+                            <td id="timeA">{{ parameters_dict['Время подачи А в бак'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>В для EC</th>
+                            <td id="statusB">откл</td>
+                            <td id="timeB">{{ parameters_dict['Время подачи В в бак'] }}</td>
+                        </tr>
+                        <tr>
+                            <th>Кислота для PH</th>
+                            <td id="statusK">откл</td>
+                            <td id="timeK">{{ parameters_dict['Время подачи К в бак'] }}</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container_log">
+        <!-- Аварии -->
+        <div class="parameter-container">
+            <h2>Аварийные события</h2>
+            <div class="log-container">
+                {% if logs_errors %}
+                    <ul class="log-list">
+                        {% for log in logs_errors %}
+                            <li>{{ (log.timestamp + timedelta).strftime('%d.%m.%Y %H:%M:%S') }} {{ log.message }}</li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Нет аварийных сообщений.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="parameter-container">
+            <h2>Измерения плотности и буферности</h2>
+            <div class="log-container">
+                {% if records %}
+                    <ul class="log-list">
+                        {% for record in records %}
+                            {% if record.density_name == 'actual_density' %}
+                                <li>{{ (record.timestamp + timedelta).strftime('%d.%m.%Y %H:%M:%S') }} фактическая плотность А и В = {{ record.value | round(1) }}</li>
+                            {% elif record.density_name == 'buffer_capacity' %}
+                                <li>{{ (record.timestamp + timedelta).strftime('%d.%m.%Y %H:%M:%S') }} фактическая буферность раствора = {{ record.value | round(1) }}</li>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>Нет записей.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const getParametersUrl = "{{ url_for('get_parameters') }}";
+    const toggleParameterUrl = "{{ url_for('toggle_parameter') }}";
+    const setParameterValueUrl = "{{ url_for('set_parameter_value') }}";
+</script>
+<script src="{{ url_for('static', filename='scripts/main2.js') }}"></script>
+{% endblock %}
