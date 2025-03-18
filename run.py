@@ -14,4 +14,4 @@ def start_mixing_unit():
 if __name__ == "__main__":
     # start_sync_module()    # Запуск модуля синхронизации в отдельном потоке
     # start_mixing_unit()    # Запуск модуля регулирования в отдельном потоке
-    app.run(host='0.0.0.0', port=5555, debug=True, use_reloader=False)
+    app.run(host='0.0.0.0', port=5000, debug=True, use_reloader=False)
